@@ -1,68 +1,93 @@
 # ShieldNex MailSense
 
-**Email Deliverability Intelligence**
+### Email Deliverability Intelligence
 
-An independent software development internship selection project
-prepared for ShieldNex Aerospace.
+An independent software development internship selection
+project prepared for ShieldNex Aerospace.
 
-MailSense is a Flask web application for batch email validation
-and mail-routing analysis.
+MailSense is an explainable email-routing analysis tool built
+with Python, Flask, JavaScript, and DNS inspection.
 
-## Features
+It identifies obvious delivery risks while clearly reporting
+cases where individual mailbox existence cannot be confirmed.
 
-- Professional responsive dashboard
-- Bulk validation of up to 50 email addresses
-- Email syntax validation
-- MX record and domain checks
-- A/AAAA mail-routing fallback
+## Key Features
+
+### Signal Trace
+Four diagnostic stages for every address:
+1. Syntax validation
+2. Domain assessment
+3. Mail-routing assessment
+4. Mailbox confirmation status
+
+### Domain Intelligence
+- MX record inspection
+- MX hostnames and priorities
 - Null MX detection
-- Three result classifications with explanations
-- Summary statistics
-- CSV report export
-- DNS caching within each analysis request
-- Automated tests
-- No outgoing email messages
+- A/AAAA fallback
+- Domain grouping
+- Per-domain DNS lookup duration
+- In-request DNS caching
 
-## Technology
+### Result Explorer
+- Bulk analysis of up to 50 unique addresses
+- Status filters
+- Searchable results
+- Expandable evidence details
+- Classification distribution
 
-- Python and Flask
-- dnspython
-- email-validator
-- HTML5, CSS3 and JavaScript
-- Gunicorn
-- Pytest
+### Reporting
+- CSV export with spreadsheet formula protection
+- Print-ready reports that can be saved as PDF
+- Summary counts and diagnostic evidence
 
-## How It Works
+### Engineering
+- Bounded parallel DNS lookups
+- Input validation and payload limits
+- Simple per-instance request throttling
+- Security response headers
+- Responsive UI
+- Keyboard shortcut: Cmd/Ctrl + Enter
+- Automated backend tests
 
-1. Users paste a list of email addresses.
-2. Duplicate addresses are removed.
-3. The backend validates email syntax.
-4. DNS records are checked to establish mail routing.
-5. The application classifies each address.
-6. Results are shown in the dashboard and can be exported.
+## Classification Methodology
 
-## Classification Rules
+**Likely Delivered**
 
-### Likely Delivered
+Only used for an address previously and independently
+confirmed by the operator, when DNS mail routing is present.
 
-The address must have been independently confirmed by the
-application operator and have available mail routing.
+This is not proof of future delivery.
 
-This status does not guarantee future delivery.
+**Likely Bounce**
 
-### Likely Bounce
+Used when syntax is invalid, the domain does not exist,
+an exclusive Null MX is configured, or DNS shows no usable
+mail-routing records.
 
-Returned for invalid syntax, nonexistent domains,
-Null MX records, or domains without usable mail routing.
+**Unknown**
 
-### Unknown
+Used when mail routing is available but mailbox existence
+cannot be determined, or DNS queries are inconclusive.
 
-Returned when the domain has possible mail routing but
-the individual mailbox cannot be confirmed, or when
-DNS lookups are inconclusive.
+Most syntactically valid addresses with MX records will
+be classified Unknown unless separately confirmed.
 
-Most valid addresses will return Unknown because MX
-records cannot establish individual mailbox existence.
+There is intentionally no invented deliverability
+percentage or confidence score.
+
+## How the Backend Works
+
+1. Receives a JSON array of email addresses.
+2. Removes duplicate addresses.
+3. Validates each address using email-validator.
+4. Extracts unique domains from valid addresses.
+5. Resolves domains with bounded parallel workers.
+6. Checks MX records and permitted A/AAAA fallback.
+7. Builds a structured diagnostic trace.
+8. Returns JSON for the frontend to visualize.
+
+DNS results are reused within a batch.
 
 ## Run Locally
 
@@ -75,80 +100,144 @@ pip install -r requirements-dev.txt
 python app.py
 ```
 
-Open http://127.0.0.1:5000
+Visit:
 
-## Optional Confirmed Addresses
+http://127.0.0.1:5000
 
-If you own and have independently confirmed an address:
+## Run Tests
+
+```bash
+python -m pytest -v
+```
+
+The automated tests use mocked DNS responses for
+reproducible results without external DNS dependencies.
+
+## Operator-Confirmed Mailboxes
+
+Optionally provide addresses that you own and have
+independently confirmed:
 
 ```bash
 export VERIFIED_EMAILS="your-confirmed-address@gmail.com"
 python app.py
 ```
 
-Use only addresses that are actually confirmed.
+On Render, configure this as an environment variable
+only if you have actual confirmed addresses.
 
-Without this configuration, the Likely Delivered category
-will normally remain empty. This is intentional.
-
-## Automated Tests
-
-```bash
-python -m pytest -v
-```
-
-Tests use mocked DNS results where appropriate to avoid
-depending on external network conditions.
+If not configured, Likely Delivered may remain at zero.
+That is intentional.
 
 ## Deploy on Render
 
-Create a new Render Web Service connected to this repository,
-or use the included render.yaml Blueprint.
+Create a Python Web Service connected to this repository.
 
-- Runtime: Python
-- Build: pip install -r requirements.txt
-- Start: gunicorn app:app --timeout 180
-- Health endpoint: /health
+Build command:
 
-## Hosting Limitations
+```bash
+pip install -r requirements.txt
+```
 
-Render Free services block outbound connections on SMTP ports
-25, 465 and 587.
+Start command:
 
-MailSense does not use SMTP and does not send messages.
+```bash
+gunicorn app:app --workers 1 --threads 2 --timeout 180
+```
+
+Health check:
+
+`/health`
+
+Alternatively, deploy using render.yaml.
+
+## Hosting and Verification Limitations
+
+Render Free web services block outbound SMTP
+connections on ports 25, 465 and 587.
+
+MailSense never makes SMTP connections and never
+sends messages.
 
 The deployed application CAN:
-
 - Validate email syntax
-- Check DNS and MX records
-- Detect a Null MX configuration
-- Check A/AAAA fallback records
-- Report independently confirmed addresses if configured
+- Check MX records
+- Check domain DNS status
+- Identify Null MX configurations
+- Use A/AAAA mail-routing fallback
+- Display operator-confirmed addresses if configured
 
 The deployed application CANNOT:
-
-- Guarantee an email will be delivered
-- Confirm arbitrary mailbox existence
-- Reliably detect catch-all mail servers
+- Guarantee future delivery
+- Verify arbitrary mailbox existence
+- Reliably detect all catch-all domains
 - Verify inbox placement
-- Guarantee delivery past spam filtering
+- Determine whether spam filters would reject a message
 
-If DNS is unavailable, a domain's result is Unknown.
+Unknown is the correct output when evidence is insufficient.
 
-## Privacy and Security
+DNS resolvers or hosting networks can block or time out
+DNS requests. These are reported as inconclusive.
 
-- Submitted addresses are processed in memory.
-- No database is used.
-- No message content is sent or stored.
-- No SMTP mailbox probing is performed.
-- DNS resolvers may observe queried domain names.
-- Each request has address and payload size limits.
-- CSV export escapes spreadsheet formula-like values.
+## Security and Privacy
 
-This is a limited demonstration tool, not a production-scale
-mail validation service.
+- Maximum 50 unique addresses per request
+- 24 KB JSON request size limit
+- Basic in-memory per-IP request throttling
+- Security headers, including a Content Security Policy
+- User content rendered safely using textContent
+- No database and no persistent email-address storage
+- No outgoing email messages
+- No SMTP mailbox probing
+- DNS queries reveal domain names to resolvers
+- Temporary client IP rate-limit counters are held in memory
+- Google Fonts hosts may receive standard font-loading requests
 
-## Project Disclaimer
+The request limiter is per application process and relies
+on the observed remote address. It is not a distributed,
+production-grade rate limiter and may group users behind
+a common reverse proxy.
 
-Independent candidate work for an internship selection task.
-Not an official or endorsed ShieldNex Aerospace product.
+This is a demonstration application, not a commercial
+mail-verification service.
+
+## API
+
+POST `/api/analyze`
+
+Example request:
+
+```json
+{
+  "emails": [
+    "hello@gmail.com",
+    "invalid-email"
+  ]
+}
+```
+
+Returns a JSON object with:
+- results: email classifications and diagnostic traces
+- domains: grouped DNS records and routing findings
+- summary: counts, domain count and analysis duration
+
+GET `/health` returns service health information.
+
+## Technology
+
+- Python
+- Flask
+- dnspython
+- email-validator
+- HTML5
+- CSS3
+- JavaScript
+- Gunicorn
+- Pytest
+
+## Attribution
+
+Independent internship selection task submission
+prepared for ShieldNex Aerospace.
+
+Not an official or endorsed company product.

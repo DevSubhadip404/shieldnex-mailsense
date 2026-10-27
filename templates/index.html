@@ -1,193 +1,290 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#F0F2F2">
-  <meta name="description" content="ShieldNex MailSense: email routing and deliverability analysis.">
-  <title>MailSense | ShieldNex Aerospace</title>
+  <meta name="theme-color" content="#F1F3F2">
+  <meta name="description" content="ShieldNex MailSense — explainable email routing diagnostics.">
+  <title>MailSense / ShieldNex</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
   <script src="{{ url_for('static', filename='app.js') }}" defer></script>
 </head>
 <body>
-  <div class="app-shell">
-
-    <header class="topbar">
-      <a href="/" class="brand" aria-label="MailSense home">
-        <div class="brand-icon" aria-hidden="true">✳</div>
-        <div class="brand-name">
+  <div class="site">
+    <header class="site-header">
+      <a href="/" class="identity" aria-label="ShieldNex MailSense home">
+        <span class="brand-symbol" aria-hidden="true">✳</span>
+        <span class="brand-text">
           <strong>SHIELDNEX</strong>
-          <span>MAILSENSE / INTELLIGENCE</span>
-        </div>
+          <small>MAILSENSE / INTELLIGENCE</small>
+        </span>
       </a>
 
-      <div class="topbar-right">
-        <span class="version">BUILD 01 / WEB</span>
-        <span class="system-status">
-          <span class="status-dot"></span>
-          DNS MODE
-        </span>
+      <div class="header-right">
+        <span class="header-edition">ENGINEERING TOOL / 002</span>
+        <span class="mode-indicator"><i></i> DNS-ONLY MODE</span>
       </div>
     </header>
 
     <main>
-      <section class="intro">
-        <div class="eyebrow">
-          <span class="eyebrow-line"></span>
-          VALIDATION MODULE / 01
+      <section class="hero">
+        <div class="section-label">
+          <span class="label-rule"></span>
+          SYSTEM 01 / EMAIL INTELLIGENCE
         </div>
 
-        <h1>Address Intelligence<span class="accent">.</span></h1>
-        <p>
-          Assess email address validity and mail-routing signals.
-          Understand delivery risks without making unsupported claims.
-        </p>
+        <div class="hero-layout">
+          <div>
+            <h1>Every address.<br><em>A traceable decision.</em></h1>
+            <p class="hero-description">
+              Investigate email addresses through syntax and DNS evidence.
+              Detect obvious delivery risks and identify what cannot be verified.
+            </p>
+          </div>
+          <div class="hero-index" aria-hidden="true">
+            <span>MX</span>
+            <small>/ 01</small>
+          </div>
+        </div>
+
+        <div class="hero-ribbon">
+          <span><b>01</b> SYNTAX</span>
+          <span><b>02</b> DOMAIN</span>
+          <span><b>03</b> MAIL ROUTING</span>
+          <span><b>04</b> MAILBOX SIGNAL</span>
+        </div>
       </section>
 
-      <div class="workspace">
+      <section class="workspace" aria-labelledby="input-title">
+        <aside class="information-rail">
+          <span class="rail-label">WORKFLOW / OVERVIEW</span>
 
-        <aside class="sidebar">
-          <div class="sidebar-heading">SYSTEM OVERVIEW</div>
-
-          <div class="side-step">
-            <span class="step-index">01</span>
+          <div class="rail-step">
+            <span>01</span>
             <div>
-              <strong>Syntax analysis</strong>
-              <small>Inspect address format.</small>
+              <strong>Provide addresses</strong>
+              <p>Paste up to 50 unique email addresses.</p>
+            </div>
+          </div>
+          <div class="rail-step">
+            <span>02</span>
+            <div>
+              <strong>Inspect routing</strong>
+              <p>Analyze MX records and DNS fallback.</p>
+            </div>
+          </div>
+          <div class="rail-step">
+            <span>03</span>
+            <div>
+              <strong>Review evidence</strong>
+              <p>Expand results to inspect individual signals.</p>
             </div>
           </div>
 
-          <div class="side-step">
-            <span class="step-index">02</span>
-            <div>
-              <strong>DNS inspection</strong>
-              <small>Check MX and fallback records.</small>
-            </div>
-          </div>
-
-          <div class="side-step">
-            <span class="step-index">03</span>
-            <div>
-              <strong>Risk classification</strong>
-              <small>Report delivery uncertainty.</small>
-            </div>
-          </div>
-
-          <div class="sidebar-note">
-            <span class="sidebar-note-title">OPERATING PRINCIPLE</span>
+          <div class="rail-note">
+            <span class="rail-note-title">IMPORTANT DISTINCTION</span>
             <p>
-              A mail server accepting traffic does not prove a
-              specific mailbox exists.
+              A domain accepting mail does not prove that
+              an individual mailbox exists.
             </p>
-            <span class="note-bottom">NO EMAILS SENT / DNS ONLY</span>
+            <small>NO MESSAGES SENT / NO SMTP PROBES</small>
           </div>
         </aside>
 
-        <section class="panel">
-          <div class="panel-header">
+        <div class="input-panel">
+          <div class="panel-top">
             <div>
-              <span class="panel-kicker">MODULE / 01</span>
-              <h2>New Analysis</h2>
-              <p>Paste a batch of email addresses to begin.</p>
+              <span class="section-label small-label">MODULE / 01</span>
+              <h2 id="input-title">Address workspace</h2>
+              <p>Begin a new batch analysis.</p>
             </div>
-            <span class="module-id">MX / DNS</span>
+            <span class="technical-pill">BATCH / MX-DNS</span>
           </div>
 
           <form id="analysis-form">
-            <div class="input-heading">
-              <label for="email-input">INPUT DATASET</label>
-              <span id="address-count">0 / 50 ADDRESSES</span>
+            <div class="input-label-line">
+              <label for="email-input">EMAIL DATASET</label>
+              <span id="address-count">00 / 50</span>
             </div>
 
-            <div class="input-area">
-              <div class="input-gutter" aria-hidden="true">
+            <div class="editor">
+              <div class="line-numbers" aria-hidden="true">
                 <span>001</span>
                 <span>002</span>
                 <span>003</span>
                 <span>004</span>
+                <span>005</span>
               </div>
-              <textarea
-                id="email-input"
-                placeholder="engineering@example.com&#10;hello@gmail.com&#10;support@company.com"
+              <textarea id="email-input" required maxlength="12000"
                 spellcheck="false"
-                maxlength="12000"
                 aria-describedby="input-help"
-                required
-              ></textarea>
+                placeholder="engineering@example.com&#10;hello@gmail.com&#10;invalid-email"></textarea>
             </div>
 
-            <p class="input-help" id="input-help">
-              Separate addresses using new lines, commas, or spaces.
-              Maximum 50 unique addresses.
-            </p>
+            <div class="helper-line">
+              <span id="input-help">
+                New lines, commas, spaces and semicolons supported.
+              </span>
+              <span>LIMIT 050</span>
+            </div>
 
-            <div id="error-message" class="error-message" role="alert" hidden></div>
+            <p id="error-message" class="error-message" role="alert" hidden></p>
+            <p id="live-status" class="live-status" role="status" aria-live="polite"></p>
 
-            <div class="action-row">
-              <span class="privacy-note">PRIVATE INPUT / NO PERSISTENT STORAGE</span>
-              <button type="submit" class="primary-button" id="run-button">
+            <div class="input-actions">
+              <div class="secondary-actions">
+                <button id="demo-button" type="button" class="text-button">
+                  <span aria-hidden="true">↗</span> LOAD EXAMPLE
+                </button>
+                <button id="clear-button" type="button" class="text-button">
+                  CLEAR
+                </button>
+              </div>
+              <button id="run-button" type="submit" class="primary-button">
                 RUN ANALYSIS <span aria-hidden="true">↗</span>
               </button>
             </div>
           </form>
-        </section>
-      </div>
+        </div>
+      </section>
 
-      <section class="report" id="results-section" hidden>
-        <div class="report-header">
+      <section id="results-section" class="results" hidden>
+        <div class="section-heading">
           <div>
-            <span class="panel-kicker">MODULE / 02</span>
-            <h2>Validation Report</h2>
-            <p>Individual address findings and routing assessments.</p>
+            <span class="section-label small-label">MODULE / 02</span>
+            <h2>Analysis overview</h2>
+            <p>Evidence-backed classifications from the current batch.</p>
           </div>
-          <button type="button" id="export-button" class="secondary-button">
-            ↓ EXPORT CSV
-          </button>
+          <div class="report-actions">
+            <button id="export-button" type="button" class="outline-button">
+              ↓ EXPORT CSV
+            </button>
+            <button id="print-button" type="button" class="outline-button">
+              ↗ SAVE PDF
+            </button>
+          </div>
         </div>
 
         <div class="metrics">
           <div class="metric">
-            <span>TOTAL ANALYZED</span>
-            <strong id="total-count">00</strong>
+            <span>ADDRESSES</span>
+            <strong id="metric-total">00</strong>
+            <small>INPUT PROCESSED</small>
           </div>
           <div class="metric">
             <span>LIKELY DELIVERED</span>
-            <strong id="delivered-count">00</strong>
+            <strong id="metric-delivered">00</strong>
+            <small>OPERATOR-CONFIRMED</small>
           </div>
           <div class="metric">
-            <span>BOUNCE RISK</span>
-            <strong id="bounce-count">00</strong>
+            <span>LIKELY BOUNCE</span>
+            <strong id="metric-bounce">00</strong>
+            <small>DELIVERY RISKS</small>
           </div>
           <div class="metric">
             <span>UNKNOWN</span>
-            <strong id="unknown-count">00</strong>
+            <strong id="metric-unknown">00</strong>
+            <small>UNCONFIRMED MAILBOXES</small>
           </div>
         </div>
 
-        <div class="results-table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>NO.</th>
-                <th>EMAIL ADDRESS</th>
-                <th>CLASSIFICATION</th>
-                <th>ANALYSIS DETAILS</th>
-              </tr>
-            </thead>
-            <tbody id="results-body"></tbody>
-          </table>
+        <div class="signal-summary">
+          <div class="signal-heading">
+            <strong>CLASSIFICATION DISTRIBUTION</strong>
+            <span id="batch-time">-- MS / -- DOMAINS</span>
+          </div>
+          <div class="distribution" role="img" aria-label="Classification distribution">
+            <div id="bar-delivered" class="segment delivered"></div>
+            <div id="bar-bounce" class="segment bounce"></div>
+            <div id="bar-unknown" class="segment unknown-segment"></div>
+          </div>
+          <div class="distribution-legend">
+            <span><i class="legend-dot delivered-dot"></i> LIKELY DELIVERED</span>
+            <span><i class="legend-dot bounce-dot"></i> LIKELY BOUNCE</span>
+            <span><i class="legend-dot unknown-dot"></i> UNKNOWN</span>
+          </div>
         </div>
 
-        <p class="report-footnote">
-          Results indicate routing signals, not guaranteed delivery.
-          Unknown is a valid and expected classification.
-        </p>
+        <section class="explorer" aria-labelledby="explorer-title">
+          <div class="explorer-top">
+            <div>
+              <span class="section-label small-label">MODULE / 03</span>
+              <h2 id="explorer-title">Result explorer</h2>
+              <p>Select an address to inspect its diagnostic trace.</p>
+            </div>
+            <span id="visible-count" class="technical-pill">0 SHOWN</span>
+          </div>
+
+          <div class="explorer-tools">
+            <div class="filters" role="group" aria-label="Filter results">
+              <button type="button" class="filter active"
+                data-filter="all" aria-pressed="true">ALL</button>
+              <button type="button" class="filter"
+                data-filter="likely_delivered" aria-pressed="false">DELIVERED</button>
+              <button type="button" class="filter"
+                data-filter="likely_bounce" aria-pressed="false">BOUNCE</button>
+              <button type="button" class="filter"
+                data-filter="unknown" aria-pressed="false">UNKNOWN</button>
+            </div>
+
+            <input type="search" id="result-search"
+              aria-label="Search analyzed addresses"
+              placeholder="Search an address...">
+          </div>
+
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>REF</th>
+                  <th>EMAIL ADDRESS</th>
+                  <th>CLASSIFICATION</th>
+                  <th>FINDING</th>
+                </tr>
+              </thead>
+              <tbody id="results-body"></tbody>
+            </table>
+          </div>
+          <p id="empty-filter" class="empty-filter" hidden>
+            No addresses match your search and filter.
+          </p>
+        </section>
+
+        <section class="domain-section" aria-labelledby="domain-title">
+          <div class="section-heading">
+            <div>
+              <span class="section-label small-label">MODULE / 04</span>
+              <h2 id="domain-title">Domain intelligence</h2>
+              <p>MX hosts, shared-domain grouping and routing evidence.</p>
+            </div>
+            <span id="domain-count" class="technical-pill">0 DOMAINS</span>
+          </div>
+
+          <div id="domain-list" class="domain-grid"></div>
+          <p id="domain-empty" class="empty-filter" hidden>
+            No valid domains to inspect in this batch.
+          </p>
+        </section>
+
+        <div class="report-disclaimer">
+          <strong>INTERPRETATION NOTE</strong>
+          <p>
+            MailSense does not guarantee message delivery. DNS indicates
+            potential mail routing, not the existence of individual mailboxes.
+            Unknown is a legitimate diagnostic result. No emails are sent.
+          </p>
+        </div>
       </section>
     </main>
 
-    <footer class="footer">
-      <span>SHIELDNEX AEROSPACE / MAILSENSE</span>
+    <footer>
+      <span>SHIELDNEX / MAILSENSE</span>
       <span>INDEPENDENT INTERNSHIP SELECTION PROJECT</span>
+      <span>DNS / NO SMTP</span>
     </footer>
   </div>
 </body>
